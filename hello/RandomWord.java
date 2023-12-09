@@ -17,7 +17,7 @@ public class RandomWord {
             String newWord = StdIn.readString();
             word = (StdRandom.bernoulli(1. / count))
                     ? newWord : word;
-            count = count + 1;
+            count++;
         }
         StdOut.println(word);
     }
