@@ -8,7 +8,7 @@ public class RandomWord {
      * of those words uniformly at random. Do not store the words in an array
      * or list. Instead, use Knuth’s method: when reading the ith word, select
      * it with probability 1/i to be the champion, replacing the previous
-     * champion. After reading all of the words, print the surviving champion
+     * champion. After reading all the words, print the surviving champion
      */
     public static void main(final String[] args) {
         String word = "";
