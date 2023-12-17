@@ -26,23 +26,25 @@ public class PercolationStats {
       Percolation percolation = new Percolation(this.n);
       double threshold = 0.;
       while (true) {
-        int row = StdRandom.uniform(this.n) + 1;
-        int col = StdRandom.uniform(this.n) + 1;
+        int row = StdRandom.uniformInt(this.n) + 1;
+        int col = StdRandom.uniformInt(this.n) + 1;
         if (percolation.isOpen(row, col)) { // don't reopen open ones
           continue;
         }
         percolation.open(row, col);
         threshold += 1.;
         if (percolation.percolates()) {
-          this.sample[i] = threshold / (this.n*this.n);
+          this.sample[i] = threshold / (this.n * this.n);
           break;
         }
       }
     }
     this.mean = StdStats.mean(this.sample);
     this.stddev = StdStats.stddev(this.sample);
-    this.confidenceLo = this.mean - this.stddev * CONFIDENCE_95 / Math.sqrt(this.trials);
-    this.confidenceHi = this.mean + this.stddev * CONFIDENCE_95 / Math.sqrt(this.trials);
+    this.confidenceLo =
+            this.mean - this.stddev * CONFIDENCE_95 / Math.sqrt(this.trials);
+    this.confidenceHi =
+            this.mean + this.stddev * CONFIDENCE_95 / Math.sqrt(this.trials);
   }
 
   public double mean() {
@@ -70,8 +72,12 @@ public class PercolationStats {
     }
 
     PercolationStats percolationStats = new PercolationStats(n, trials);
-    System.out.println("mean                    = " + percolationStats.mean());
-    System.out.println("stddev                  = " + percolationStats.stddev());
+    System.out.println(
+            "mean                    = " + percolationStats.mean()
+    );
+    System.out.println(
+            "stddev                  = " + percolationStats.stddev()
+    );
     System.out.println("95% confidence interval = ["
       + percolationStats.confidenceLo() + ", "
       + percolationStats.confidenceHi() + "]");
