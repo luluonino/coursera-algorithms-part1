@@ -1,6 +1,6 @@
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 import java.util.Iterator;
-import org.junit.Test;
 
 public class DequesTest {
   private Deque<String> deque;
@@ -11,13 +11,13 @@ public class DequesTest {
 
   @Test
   public void testConstructor () {
-    assertEquals(true, deque.isEmpty());
+    assertTrue(deque.isEmpty());
   }
 
   @Test
   public void testAll() {
     deque.addFirst("abc");
-    assertEquals(false, deque.isEmpty());
+    assertFalse(deque.isEmpty());
     deque.addFirst("def");
     deque.addFirst("ghi");
     assertEquals(3, deque.size());
@@ -27,16 +27,15 @@ public class DequesTest {
     assertEquals("abc", deque.removeLast());
     assertEquals("def", getAllStrings(deque));
     assertEquals("def", deque.removeLast());
-    assertEquals(true, deque.isEmpty());
+    assertTrue(deque.isEmpty());
     assertEquals(0, deque.size());
   }
 
-  private String getAllStrings(Deque deque) {
-    String result = "";
-    Iterator<String> iterator = deque.iterator();
-    while (iterator.hasNext()) {
-      result += iterator.next();
+  private String getAllStrings(Deque<String> deque) {
+    StringBuilder result = new StringBuilder();
+    for (String value: deque) {
+      result.append(value);
     }
-    return result;
+    return result.toString();
   }
 }

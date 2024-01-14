@@ -1,6 +1,5 @@
-import static org.junit.Assert.*;
-import java.util.Iterator;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class RandomizedQueueTest {
   private RandomizedQueue<String> queue;
@@ -11,18 +10,18 @@ public class RandomizedQueueTest {
 
   @Test
   public void testConstructor() {
-    assertEquals(true, queue.isEmpty());
+    assertTrue(queue.isEmpty());
     assertEquals(0, queue.size());
   }
 
   @Test
   public void testAll() {
     queue.enqueue("abc");
-    assertEquals(false, queue.isEmpty());
+    assertFalse(queue.isEmpty());
     assertEquals(1, queue.size());
     assertArrayEquals(new String[] {"abc"}, getAllStrings(queue));
     assertEquals("abc", queue.dequeue());
-    assertEquals(true, queue.isEmpty());
+    assertTrue(queue.isEmpty());
     assertEquals(0, queue.size());
 
     queue.enqueue("abc");
@@ -32,12 +31,11 @@ public class RandomizedQueueTest {
     assertEquals(2, queue.size());
   }
 
-  private String[] getAllStrings(RandomizedQueue queue) {
-    Iterator<String> iterator = queue.iterator();
+  private String[] getAllStrings(RandomizedQueue<String> queue) {
     String[] result = new String[queue.size()];
     int index = 0;
-    while(iterator.hasNext()) {
-      result[index++] = iterator.next();
+    for (String value: queue) {
+      result[index++] = value;
     }
     return result;
   }

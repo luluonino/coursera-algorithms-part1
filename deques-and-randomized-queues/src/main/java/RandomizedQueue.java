@@ -26,7 +26,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     if (s.length == size) {
-      resize(s.length*2);
+      resize(s.length * 2);
     }
     s[size++] = item;
   }
@@ -36,12 +36,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
       throw new NoSuchElementException();
     }
 
-    int randomIndex = StdRandom.uniform(size);
+    int randomIndex = StdRandom.uniformInt(size);
     Item item = s[randomIndex];
-    s[randomIndex] = s[size-1];
+    s[randomIndex] = s[size - 1];
     size--;
-    if (size > 0 && size == s.length/4) {
-      resize(s.length/2);
+    if (size > 0 && size == s.length / 4) {
+      resize(s.length / 2);
     }
 
     return item;
@@ -52,11 +52,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
       throw new NoSuchElementException();
     }
 
-    int randomIndex = StdRandom.uniform(size);
+    int randomIndex = StdRandom.uniformInt(size);
     return s[randomIndex];
   }
 
-  public Iterator<Item> iterator() { // return an independent iterator over items in random order
+  public Iterator<Item> iterator() {
+    // return an independent iterator over items in random order
     return new RandomizedQueueIterator();
   }
 
@@ -94,5 +95,26 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
       copy[i] = s[i];
     }
     s = copy;
+  }
+
+  // unit testing (required)
+  public static void main(String[] args) {
+    RandomizedQueue<String> myQueue = new RandomizedQueue<>();
+    System.out.println(myQueue.isEmpty());
+    System.out.println(myQueue.size());
+    myQueue.enqueue("apple");
+    myQueue.enqueue("orange");
+    myQueue.enqueue("banana");
+    System.out.println(myQueue.isEmpty());
+    System.out.println(myQueue.size());
+    for (String item: myQueue) {
+      System.out.println(item);
+    }
+    System.out.println(myQueue.sample());
+    System.out.println(myQueue.sample());
+    System.out.println(myQueue.sample());
+    System.out.println(myQueue.dequeue());
+    System.out.println(myQueue.isEmpty());
+    System.out.println(myQueue.size());
   }
 }

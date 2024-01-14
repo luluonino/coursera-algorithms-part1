@@ -1,5 +1,3 @@
-import java.util.Iterator;
-
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
@@ -15,11 +13,8 @@ public class Permutation {
       queue.enqueue(s);
     }
 
-    Iterator<String> iterator = queue.iterator();
-    for (int i = 0; i < n; i++) {
-      if (iterator.hasNext()) {
-        StdOut.println(iterator.next());
-      }
+    for (String item: queue) {
+      StdOut.println(item);
     }
   }
 }

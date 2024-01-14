@@ -36,8 +36,7 @@ public class Deque<Item> implements Iterable<Item> {
       first = newNode;
       last = newNode;
       size = 1;
-    }
-    else {
+    } else {
       Node oldFirst = first;
       first = new Node();
       first.item = item;
@@ -61,8 +60,7 @@ public class Deque<Item> implements Iterable<Item> {
       first = newNode;
       last = newNode;
       size = 1;
-    }
-    else {
+    } else {
       Node oldLast = last;
       last = new Node();
       last.item = item;
@@ -77,44 +75,38 @@ public class Deque<Item> implements Iterable<Item> {
     if (isEmpty()) {
       throw new NoSuchElementException();
     }
+    Item item = first.item;
     if (size == 1) {
-      Item item = first.item;
       first = null;
       last = null;
       size = 0;
-      return item;
-    }
-    else {
-      Item item = first.item;
+    } else {
       Node oldFirst = first;
       first = first.next;
       first.previous = null;
       oldFirst.next = null;
       size -= 1;
-      return item;
     }
+    return item;
   }
 
   public Item removeLast() {
     if (isEmpty()) {
       throw new NoSuchElementException();
     }
+    Item item = last.item;
     if (size == 1) {
-      Item item = last.item;
       last = null;
       first = null;
       size = 0;
-      return item;
-    }
-    else {
-      Item item = last.item;
+    } else {
       Node oldLast = last;
       last = last.previous;
       last.next = null;
       oldLast.previous = null;
       size -= 1;
-      return item;
     }
+    return item;
   }
 
   public Iterator<Item> iterator() {
@@ -140,6 +132,25 @@ public class Deque<Item> implements Iterable<Item> {
     public void remove() {
       throw new UnsupportedOperationException();
     }
+  }
 
+  // unit testing (required)
+  public static void main(String[] args) {
+    Deque<String> myDeque = new Deque<>();
+    System.out.println(myDeque.isEmpty());
+    System.out.println(myDeque.size());
+    myDeque.addFirst("apple");
+    myDeque.addLast("orange");
+    myDeque.addLast("banana");
+    System.out.println(myDeque.isEmpty());
+    System.out.println(myDeque.size());
+    for (String item: myDeque) {
+      System.out.println(item);
+    }
+    System.out.println(myDeque.removeFirst());
+    System.out.println(myDeque.removeLast());
+    System.out.println(myDeque.isEmpty());
+    System.out.println(myDeque.size());
   }
 }
+
