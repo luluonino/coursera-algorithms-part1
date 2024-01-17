@@ -1,6 +1,5 @@
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class FastCollinearPointsTest {
 
@@ -41,30 +40,47 @@ public class FastCollinearPointsTest {
     new Point(2, 2),
   };
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testConstructor0() {
-    final FastCollinearPoints fastCollinearPoints = new FastCollinearPoints(null);
+    assertThrows(
+            IllegalArgumentException.class, ()-> {
+              final FastCollinearPoints fastCollinearPoints
+                      = new FastCollinearPoints(null);
+            }
+    );
   }
 
   @Test
   public void testConstructor1() {
-    final FastCollinearPoints fastCollinearPoints = new FastCollinearPoints(points1);
+    final FastCollinearPoints fastCollinearPoints
+            = new FastCollinearPoints(points1);
   }
 
   @Test
   public void testConstructor2() {
-    final FastCollinearPoints fastCollinearPoints = new FastCollinearPoints(points2);
+    final FastCollinearPoints fastCollinearPoints
+            = new FastCollinearPoints(points2);
     assertEquals(0, fastCollinearPoints.numberOfSegments());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testConstructor3() {
-    final FastCollinearPoints fastCollinearPoints = new FastCollinearPoints(points3);
+    assertThrows(
+            IllegalArgumentException.class, ()-> {
+              final FastCollinearPoints fastCollinearPoints
+                      = new FastCollinearPoints(points3);
+            }
+    );
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testConstructor4() {
-    final FastCollinearPoints fastCollinearPoints = new FastCollinearPoints(points4);
+    assertThrows(
+            IllegalArgumentException.class, () -> {
+              final FastCollinearPoints fastCollinearPoints
+                      = new FastCollinearPoints(points4);
+            }
+    );
   }
 
   @Test

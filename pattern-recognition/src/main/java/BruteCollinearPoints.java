@@ -10,7 +10,8 @@ public class BruteCollinearPoints {
 
   private final List<LineSegment> segments;
 
-  public BruteCollinearPoints(Point[] points) {    // finds all line segments containing 4 points
+  // finds all line segments containing 4 points
+  public BruteCollinearPoints(Point[] points) {
     // check arguments
     if (points == null) {
       throw new IllegalArgumentException();
@@ -25,8 +26,8 @@ public class BruteCollinearPoints {
     System.arraycopy(points, 0, myPoints, 0, points.length);
     Arrays.sort(myPoints);
 
-    for (int i = 0; i < myPoints.length-1; i++) {
-      if (myPoints[i].compareTo(myPoints[i+1]) == 0) {
+    for (int i = 0; i < myPoints.length - 1; i++) {
+      if (myPoints[i].compareTo(myPoints[i + 1]) == 0) {
         throw new IllegalArgumentException();
       }
     }
@@ -34,14 +35,15 @@ public class BruteCollinearPoints {
     // find segments
     this.segments = new ArrayList<LineSegment>();
 
-    for (int i = 0; i < myPoints.length-3; i++) {
-      for (int j = i+1; j < myPoints.length-2; j++) {
-        for (int k = j+1; k < myPoints.length-1; k++) {
-          for (int m = k+1; m < myPoints.length; m++) {
+    for (int i = 0; i < myPoints.length - 3; i++) {
+      for (int j = i + 1; j < myPoints.length - 2; j++) {
+        for (int k = j + 1; k < myPoints.length - 1; k++) {
+          for (int m = k + 1; m < myPoints.length; m++) {
             double slope1 = myPoints[i].slopeTo(myPoints[j]);
             double slope2 = myPoints[i].slopeTo(myPoints[k]);
             double slope3 = myPoints[i].slopeTo(myPoints[m]);
-            if (Double.compare(slope1, slope2) == 0 && Double.compare(slope1, slope3) == 0) {
+            if (Double.compare(slope1, slope2) == 0
+                    && Double.compare(slope1, slope3) == 0) {
               this.segments.add(new LineSegment(myPoints[i], myPoints[m]));
             }
           }

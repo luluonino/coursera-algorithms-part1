@@ -11,7 +11,8 @@ public class FastCollinearPoints {
 
   private final List<LineSegment> segments;
 
-  public FastCollinearPoints(Point[] points) {    // finds all line segments containing 4 points
+  // finds all line segments containing 4 points
+  public FastCollinearPoints(Point[] points) {
     // check arguments
     if (points == null) {
       throw new IllegalArgumentException();
@@ -26,14 +27,14 @@ public class FastCollinearPoints {
     System.arraycopy(points, 0, myPoints, 0, points.length);
     Arrays.sort(myPoints);
 
-    for (int i = 0; i < myPoints.length-1; i++) {
-      if (myPoints[i].compareTo(myPoints[i+1]) == 0) {
+    for (int i = 0; i < myPoints.length - 1; i++) {
+      if (myPoints[i].compareTo(myPoints[i + 1]) == 0) {
         throw new IllegalArgumentException();
       }
     }
 
     // find segments
-    this.segments = new ArrayList<LineSegment>();
+    this.segments = new ArrayList<>();
 
     final Point[] myCopy = new Point[myPoints.length];
     System.arraycopy(myPoints, 0, myCopy, 0, myPoints.length);
@@ -45,31 +46,28 @@ public class FastCollinearPoints {
       Arrays.sort(myCopy, bySlope);
 
       final List<Point> collinearPoints = new ArrayList<>();
-      // collinearPoints.add(myCopy[0]);
-      for (int j = 1; j < myCopy.length-1;) {
+      for (int j = 1; j < myCopy.length - 1;) {
         if (collinearPoints.isEmpty()) {
           collinearPoints.add(myCopy[j]);
         }
         double slopej = myPoints[i].slopeTo(myCopy[j]);
-        double slopejp1 = myPoints[i].slopeTo(myCopy[j+1]);
-        if (Double.compare(slopej, slopejp1) == 0) {
-          collinearPoints.add(myCopy[j+1]);
-          j++;
-        }
-        else {
+        double slopejp1 = myPoints[i].slopeTo(myCopy[j + 1]);
+        if (Double.compare(slopej, slopejp1) != 0) {
           if (collinearPoints.size() >= 3) {
             collinearPoints.add(myPoints[i]);
             final Point[] copy = new Point[collinearPoints.size()];
             collinearPoints.toArray(copy);
             Arrays.sort(copy);
             if (copy[0].compareTo(myPoints[i]) == 0) {
-              this.segments.add(new LineSegment(copy[0], copy[copy.length-1]));
+              this.segments.add(
+                      new LineSegment(copy[0], copy[copy.length - 1])
+              );
             }
           }
           collinearPoints.clear();
-          collinearPoints.add(myCopy[j+1]);
-          j++;
         }
+        collinearPoints.add(myCopy[j + 1]);
+        j++;
       }
 
       if (collinearPoints.size() >= 3) {
@@ -78,7 +76,7 @@ public class FastCollinearPoints {
         collinearPoints.toArray(copy);
         Arrays.sort(copy);
         if (copy[0].compareTo(myPoints[i]) == 0) {
-          this.segments.add(new LineSegment(copy[0], copy[copy.length-1]));
+          this.segments.add(new LineSegment(copy[0], copy[copy.length - 1]));
         }
       }
 
