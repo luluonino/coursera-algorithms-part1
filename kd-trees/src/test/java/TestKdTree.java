@@ -20,6 +20,14 @@ public class TestKdTree {
             new Point2D(0.1, 0.85),
     };
 
+    private static final Point2D[] points1 = new Point2D[]{
+            new Point2D(0.7, 0.2),
+            new Point2D(0.5, 0.4),
+            new Point2D(0.2, 0.3),
+            new Point2D(0.4, 0.7),
+            new Point2D(0.9, 0.6),
+    };
+
     private static final RectHV rect = new RectHV(0.2, 0.3, 0.55, 0.74);
 
     private static final Point2D ref = new Point2D(0.51, 0.78);
@@ -29,6 +37,20 @@ public class TestKdTree {
         KdTree kdTree = new KdTree();
         assertEquals(0, kdTree.size());
         assertTrue(kdTree.isEmpty());
+    }
+
+    @Test
+    public void testInsert() {
+        KdTree kdTree = new KdTree();
+        for (Point2D point: points) {
+            kdTree.insert(point);
+        }
+        assertEquals(8, kdTree.size());
+        assertFalse(kdTree.isEmpty());
+        for (Point2D point: points) {
+            kdTree.insert(point);
+        }
+        assertEquals(8, kdTree.size());
     }
 
     @Test
@@ -172,7 +194,7 @@ public class TestKdTree {
     public void testNearest1() {
         // initialize the two data structures with point from file
         KdTree kdTree = new KdTree();
-        for (Point2D point: points) {
+        for (Point2D point: points1) {
             kdTree.insert(point);
         }
 

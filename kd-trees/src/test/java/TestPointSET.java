@@ -33,6 +33,20 @@ public class TestPointSET {
     }
 
     @Test
+    public void testInsert() {
+        PointSET pointSET = new PointSET();
+        for (Point2D point: points) {
+            pointSET.insert(point);
+        }
+        assertEquals(10, pointSET.size());
+        assertFalse(pointSET.isEmpty());
+        for (Point2D point: points) {
+            pointSET.insert(point);
+        }
+        assertEquals(10, pointSET.size());
+    }
+
+    @Test
     public void testDraw() {
         PointSET pointSET = new PointSET();
         for (Point2D point: points) {
