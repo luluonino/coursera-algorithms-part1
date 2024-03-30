@@ -36,12 +36,12 @@ public class TestBoggleSolver {
     }
 
     @Test
-    public void testGetAllValidWords() {
-        In in = new In(workDir + "/data/dictionary-yawl.txt");
+    public void testGetAllValidWords1() {
+        In in = new In(workDir + "/data/dictionary-algs4.txt");
         String[] dictionary = in.readAllStrings();
         BoggleSolver solver = new BoggleSolver(dictionary);
 
-        BoggleBoard board = new BoggleBoard(workDir + "/data/board-points100.txt");
+        BoggleBoard board = new BoggleBoard(workDir + "/data/board-q.txt");
 
         int score = 0;
         for (String word : solver.getAllValidWords(board)) {
@@ -49,5 +49,27 @@ public class TestBoggleSolver {
             score += solver.scoreOf(word);
         }
         StdOut.println("Score = " + score);
+    }
+
+    @Test
+    public void testGetAllValidWords2() {
+        In in = new In(workDir + "/data/dictionary-yawl.txt");
+        String[] dictionary = in.readAllStrings();
+        BoggleSolver solver = new BoggleSolver(dictionary);
+
+        int[] expectedScores = {
+                0, 1000, 100, 1111, 1250, 13464, 1500, 1, 2000, 200,
+                26539, 2, 300, 3, 400, 4410, 4527, 4540, 4, 500, 5, 750, 777
+        };
+
+        for (int expected: expectedScores) {
+            BoggleBoard board = new BoggleBoard(workDir + String.format("/data/board-points%d.txt", expected));
+
+            int score = 0;
+            for (String word : solver.getAllValidWords(board)) {
+                score += solver.scoreOf(word);
+            }
+            assertEquals(expected, score);
+        }
     }
 }
