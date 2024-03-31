@@ -62,6 +62,8 @@ public class TestBoggleSolver {
                 26539, 2, 300, 3, 400, 4410, 4527, 4540, 4, 500, 5, 750, 777
         };
 
+        long startTime = System.nanoTime();
+
         for (int expected: expectedScores) {
             BoggleBoard board = new BoggleBoard(workDir + String.format("/data/board-points%d.txt", expected));
 
@@ -71,5 +73,8 @@ public class TestBoggleSolver {
             }
             assertEquals(expected, score);
         }
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime)/1000000;  //divide by 1000000 to get milliseconds.
+        StdOut.println(duration);
     }
 }
