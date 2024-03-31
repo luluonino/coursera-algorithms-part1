@@ -1,1 +1,1 @@
-# Homework of Algorithms Part 1
+# Homework of Algorithms Part 1 & 2
