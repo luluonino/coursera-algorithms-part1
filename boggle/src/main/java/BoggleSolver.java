@@ -1,11 +1,29 @@
-import edu.princeton.cs.algs4.TST;
-
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import edu.princeton.cs.algs4.Bag;
 
 public class BoggleSolver {
-    private final TST<Boolean> dictionary;
+    private final TrieSET26 dictionary;
+    private int rows;
+    private int cols;
+    private Bag<String> results;
+    private ArrayList<TrieSET26.Node> visitedNodes;
+    private TrieSET26.Node root;
+    private char[] letters = new char[16];
+    private boolean[] marked = new boolean[16];
+    private Dice[] dices;
+    private Dice[] dices4x4 = constructDices(4, 4);
+
+    private class Dice {
+        private Bag<Integer> adj;
+
+        public Dice() {
+        }
+
+        public void setAdj(Bag<Integer> adj) {
+            this.adj = adj;
+        }
+    }
 
     /**
      * Initializes the data structure using the given array of strings as the
@@ -14,12 +32,11 @@ public class BoggleSolver {
      * @param dictionary array of words in the dictionary
      */
     public BoggleSolver(final String[] dictionary) {
-        this.dictionary = new TST<>();
-        Arrays.stream(dictionary).forEach(
-            word -> {
-                this.dictionary.put(word, true);
-            }
-        );
+        this.dictionary = new TrieSET26();
+        Arrays.stream(dictionary).forEach(word -> {
+            if (word.length() >= 3) this.dictionary.add(word);
+        });
+        this.root = this.dictionary.getRoot();
     }
 
     /**
@@ -29,65 +46,71 @@ public class BoggleSolver {
      * @return all valid words
      */
     public Iterable<String> getAllValidWords(final BoggleBoard board) {
-        HashSet<String> results = new HashSet<>();
-        for (int row = 0; row < board.rows(); row++) {
-            for (int col = 0; col < board.cols(); col++) {
-                boolean[][] marked = new boolean[board.rows()][board.cols()];
-                this.visit(row, col, marked, "", results, board);
+        this.rows = board.rows();
+        this.cols = board.cols();
+
+        if (this.rows == 4 && this.cols == 4) this.dices = this.dices4x4;
+        else this.dices = constructDices(this.rows, this.cols);
+        if (this.rows * this.cols > 16) {
+            this.marked = new boolean[this.rows * this.cols];
+            this.letters = new char[this.rows * this.cols];
+        }
+        for (int row = 0; row < this.rows; row++) {
+            for (int col = 0; col < this.cols; col++) {
+                this.letters[row * this.cols + col]
+                    = board.getLetter(row, col);
             }
         }
-        return results;
+        this.results = new Bag<>();
+        this.visitedNodes = new ArrayList<>();
+        for (int row = 0; row < this.rows; row++) {
+            for (int col = 0; col < this.cols; col++) {
+                this.visit(this.root, row * this.cols + col, 0);
+            }
+        }
+        for (TrieSET26.Node node: this.visitedNodes) {
+            node.setVisited(false);
+        }
+        return this.results;
     }
 
     /**
      * Visit (row, col) and its neighbours iteratively.
-     * @param row index of current row
-     * @param col index of current col
-     * @param marked 2d array to mark visited dices
-     * @param prefix letters from dices alreay visited
-     * @param results already found valid words
-     * @param board the Boggle board
+     * @param node node in dictionary to start with for current letter
+     * @param index flattened 1-d index of dice
+     * @param d length of current prefix
      */
     private void visit(
-        final int row,
-        final int col,
-        final boolean[][] marked,
-        final String prefix,
-        final Set<String> results,
-        final BoggleBoard board
+        TrieSET26.Node node,
+        final int index,
+        final int d
     ) {
-        char c = board.getLetter(row, col);
-        String newPrefix = prefix + (c == 'Q' ? "QU" : c); // Qu case
-        if (newPrefix.length() >= 3) { // no need to look at it when len < 3
-            if (this.dictionary.contains(newPrefix)) results.add(newPrefix);
-        }
-        // no need to look at neighbours if no more match with current prefix
-        boolean noMatch = true;
-        for (String ignored : this.dictionary.keysWithPrefix(newPrefix)) {
-            noMatch = false;
-            break;
-        }
-        if (noMatch) return;
+        if (node == null) return;
+        char c = this.letters[index];
+        TrieSET26.Node nextNode = node.get(c);
+        if (nextNode == null) return;
+        if (c == 'Q') nextNode = nextNode.get('U');
+        if (nextNode == null) return;
 
-        marked[row][col] = true;
-
-        int nRows = board.rows();
-        int nCols = board.cols();
-        // Visit neighbouring dices
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (row + i < 0
-                    || row + i > nRows - 1
-                    || col + j < 0
-                    || col + j > nCols - 1
-                ) continue; // invalid index
-                if (i == 0 && j == 0) continue; // current dice
-                if (marked[row + i][col + j]) continue; // already visited
-                this.visit(row + i, col + j, marked, newPrefix, results, board);
-                // reset on our way back
-                marked[row + i][col + j] = false;
-            }
+        int increment = c == 'Q' ? 2 : 1;
+        if (d + increment >= 3 && nextNode.isString() && !nextNode.isVisited()) {
+            this.results.add(nextNode.getWord());
+            nextNode.setVisited(true);
+            this.visitedNodes.add(nextNode);
         }
+
+        marked[index] = true;
+
+        for (int neighbour: this.dices[index].adj) {
+            if (marked[neighbour]) continue;
+            this.visit(
+                    nextNode,
+                    neighbour,
+                    d + increment
+            );
+        }
+
+        marked[index] = false;
     }
 
     /**
@@ -97,7 +120,7 @@ public class BoggleSolver {
      * @param word the word to be scored
      * @return Boggle score
      */
-    public int scoreOf(String word) {
+    public int scoreOf(final String word) {
         if (word == null) return 0;
         if (!this.dictionary.contains(word)) return 0;
         if (word.length() <= 2) return 0;
@@ -107,8 +130,28 @@ public class BoggleSolver {
                 return 1;
             case 5: return 2;
             case 6: return 3;
-            case 7: return 5;
+                case 7: return 5;
             default: return 11;
         }
+    }
+
+    private Dice[] constructDices(int rows, int cols) {
+        Dice[] dices = new Dice[rows * cols];
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                Bag<Integer> adj = new Bag<>();
+                if (row != 0) adj.add((row - 1) * cols + col);
+                if (row != rows - 1) adj.add((row + 1) * cols + col);
+                if (col != 0) adj.add(row * cols + col - 1);
+                if (col != cols - 1) adj.add(row * cols + col + 1);
+                if (row != 0 && col != 0) adj.add((row - 1) * cols + col - 1);
+                if (row != 0 && col != cols - 1) adj.add((row - 1) * cols + col + 1);
+                if (row != rows - 1 && col != 0) adj.add((row + 1) * cols + col - 1);
+                if (row != rows - 1 && col != cols - 1) adj.add((row + 1) * cols + col + 1);
+                dices[row * cols + col] = new Dice();
+                dices[row * cols + col].setAdj(adj);
+            }
+        }
+        return dices;
     }
 }
