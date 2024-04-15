@@ -12,13 +12,15 @@ public class CircularSuffixArray {
      * @param s Original string
      */
     public CircularSuffixArray(String s) {
+        if (s == null) throw new IllegalArgumentException("input is null");
         this.originalString = s;
-        ArrayList<CircularSuffix> circularSuffixes = new ArrayList<CircularSuffix>();
-        for (int i = 0; i < s.length(); i++) {
-            circularSuffixes.add(new CircularSuffix(this.originalString, i));
-        }
-        Collections.sort(circularSuffixes);
         this.indices = new int[s.length()];
+        ArrayList<CircularSuffix> circularSuffixes = new ArrayList<>();
+        for (int i = 0; i < s.length(); i++) {
+            circularSuffixes.add(new CircularSuffix(i));
+        }
+        // TODO: suffix sorting can be faster than O(n log n) using radix sort
+        Collections.sort(circularSuffixes);
         for (int i = 0; i < s.length(); i++) {
             this.indices[i] = circularSuffixes.get(i).getCharIndex();
         }
@@ -38,6 +40,8 @@ public class CircularSuffixArray {
      * @return index of original suffix
      */
     public int index(int i) {
+        if (i < 0 || i >= this.originalString.length())
+            throw new IllegalArgumentException("input out of range");
         return this.indices[i];
     }
 
@@ -50,16 +54,14 @@ public class CircularSuffixArray {
     }
 
     private class CircularSuffix implements Comparable<CircularSuffix> {
-        private String original;
-        private int charIndex;
+        private final int charIndex;
 
         /**
          * Constructor
          * @param s Reference to original string
          * @param i index of starting char of the suffix in original string
          */
-        public CircularSuffix (String s, int i) {
-            this.original = s;
+        public CircularSuffix(int i) {
             this.charIndex = i;
         }
 
@@ -76,16 +78,16 @@ public class CircularSuffixArray {
             int thisCharIndex = this.charIndex;
             int thatCharIndex = circularSuffix.getCharIndex();
             int counter = 0;
-            while (counter < this.original.length()) {
-                char thisChar = this.original.charAt(thisCharIndex++);
-                char thatChar = this.original.charAt(thatCharIndex++);
+            while (counter < originalString.length()) {
+                char thisChar = originalString.charAt(thisCharIndex++);
+                char thatChar = originalString.charAt(thatCharIndex++);
                 if (thisChar < thatChar)
                     return -1;
                 else if (thisChar > thatChar)
                     return 1;
                 else {
-                    if (thisCharIndex == this.original.length()) thisCharIndex = 0;
-                    if (thatCharIndex == this.original.length()) thatCharIndex = 0;
+                    if (thisCharIndex == originalString.length()) thisCharIndex = 0;
+                    if (thatCharIndex == originalString.length()) thatCharIndex = 0;
                     counter++;
                 }
             }
