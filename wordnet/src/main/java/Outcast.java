@@ -4,12 +4,19 @@ import edu.princeton.cs.algs4.StdOut;
 public class Outcast {
     private WordNet wordNet;
 
-    // constructor takes a WordNet object
+    /**
+     * Constructor
+     * @param wordnet WordNet object
+     */
     public Outcast(final WordNet wordnet) {
         this.wordNet = wordnet;
     }
 
-    // given an array of WordNet nouns, return an outcast
+    /**
+     * Given an array of WordNet nouns, return an outcast
+     * @param nouns Array of WordNet nouns
+     * @return Outcast
+     */
     public String outcast(final String[] nouns) {
         String outcast = null;
         int largestDist = -1;
@@ -26,7 +33,11 @@ public class Outcast {
         return outcast;
     }
 
-    public static void main(final String[] args) { // see test client below
+    /**
+     * Test client
+     * @param args Command line arguments
+     */
+    public static void main(final String[] args) {
         WordNet wordnet = new WordNet(args[0], args[1]);
         Outcast outcast = new Outcast(wordnet);
         for (int t = 2; t < args.length; t++) {

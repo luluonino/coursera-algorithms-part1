@@ -11,7 +11,10 @@ public class SAP {
 
     private final HashMap<String, List<Integer>> cache;
 
-    // constructor takes a digraph (not necessarily a DAG)
+    /**
+     * Constructor
+     * @param G the input digraph
+     */
     public SAP(final Digraph G) {
         if (G == null) throw new IllegalArgumentException("input is null");
         this.digraph = new Digraph(G.V()); // deep copy
@@ -23,37 +26,64 @@ public class SAP {
         this.cache = new HashMap<>();
     }
 
-    // length of shortest ancestral path between v and w; -1 if no such path
+    /**
+     * Length of the shortest ancestral path between two vertices
+     * @param v the first vertex
+     * @param w the second vertex
+     * @return length of the shortest ancestral path
+     */
     public int length(int v, int w) {
         return findSAP(v, w).get(1);
     }
 
-    // a common ancestor of v and w that participates in a shortest
-    // ancestral path; -1 if no such path
+    /**
+     * Common ancestor of two vertices that participates in a shortest
+     * @param v the first vertex
+     * @param w the second vertex
+     * @return common ancestor of two vertices, -1 if no such path
+     */
     public int ancestor(int v, int w) {
         return findSAP(v, w).get(0);
     }
 
-    // length of shortest ancestral path between any vertex in v and
-    // any vertex in w; -1 if no such path
+    /**
+     * Length of the shortest ancestral path between two sets of vertices
+     * @param v the first set of vertices
+     * @param w the second set of vertices
+     * @return length of the shortest ancestral path, -1 if no such path
+     */
     public int length(Iterable<Integer> v, Iterable<Integer> w) {
         return findSAP(v, w).get(1);
     }
 
-    // a common ancestor that participates in shortest ancestral path;
-    // -1 if no such path
+    /**
+     * Common ancestor of two sets of vertices that participates in a shortest
+     * @param v the first set of vertices
+     * @param w the second set of vertices
+     * @return common ancestor of two sets of vertices, -1 if no such path
+     */
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
         return findSAP(v, w).get(0);
     }
 
-    // do unit testing of this class
-    // public static void main(String[] args) {
-    // }
-
+    /**
+     * Find the shortest ancestral path between two vertices
+     * @param v the first vertex
+     * @param w the second vertex
+     * @return a list of two elements, the first element is the common ancestor,
+     * the second element is the length of the shortest ancestral path
+     */
     private List<Integer> findSAP(int v, int w) {
         return findSAP(new HashSet<>(List.of(v)), new HashSet<>(List.of(w)));
     }
 
+    /**
+     * Find the shortest ancestral path between two iterables of vertices
+     * @param v the first iterable of vertices
+     * @param w the second iterable of vertices
+     * @return a list of two elements, the first element is the common ancestor,
+     * the second element is the length of the shortest ancestral path
+     */
     private List<Integer> findSAP(Iterable<Integer> v, Iterable<Integer> w) {
         if (v == null || w == null)
             throw new IllegalArgumentException("input is null");
@@ -67,6 +97,13 @@ public class SAP {
         return findSAP(hashSetV, hashSetW);
     }
 
+    /**
+     * Find the shortest ancestral path between two sets of vertices
+     * @param v the first set of vertices
+     * @param w the second set of vertices
+     * @return a list of two elements, the first element is the common ancestor,
+     * the second element is the length of the shortest ancestral path
+     */
     private List<Integer> findSAP(HashSet<Integer> v, HashSet<Integer> w) {
         if (v == null || w == null)
             throw new IllegalArgumentException("input is null");

@@ -14,7 +14,11 @@ public class WordNet {
     private final SAP sap;
     private int size;
 
-    // constructor takes the name of the two input files
+    /**
+     * Constructor
+     * @param synsets the synsets file
+     * @param hypernyms the hypernyms file
+     */
     public WordNet(String synsets, String hypernyms) {
         if (synsets == null || hypernyms == null)
             throw new IllegalArgumentException();
@@ -63,18 +67,30 @@ public class WordNet {
         this.sap = new SAP(digraph);
     }
 
-    // returns all WordNet nouns
+    /**
+     * Returns all WordNet nouns
+     * @return all WordNet nouns
+     */
     public Iterable<String> nouns() {
         return hashMap.keySet();
     }
 
-    // is the word a WordNet noun?
+    /**
+     * Is the word a WordNet noun?
+     * @param word the input word
+     * @return true if the word is a WordNet noun, false otherwise
+     */
     public boolean isNoun(String word) {
         if (word == null) throw new IllegalArgumentException();
         return hashMap.containsKey(word);
     }
 
-    // distance between nounA and nounB (defined below)
+    /**
+     * Calculate the distance between two nouns
+     * @param nounA the first noun
+     * @param nounB the second noun
+     * @return the distance between the two nouns
+     */
     public int distance(String nounA, String nounB) {
         if (nounA == null || nounB == null)
             throw new IllegalArgumentException();
@@ -88,9 +104,12 @@ public class WordNet {
         return dist;
     }
 
-    // a synset (second field of synsets.txt) that is the common ancestor
-    // of nounA and nounB
-    // in a shortest ancestral path (defined below)
+    /**
+     * Calculate the shortest common ancestor of two nouns
+     * @param nounA the first noun
+     * @param nounB the second noun
+     * @return the shortest common ancestor of the two nouns
+     */
     public String sap(String nounA, String nounB) {
         if (nounA == null || nounB == null)
             throw new IllegalArgumentException();
@@ -104,8 +123,4 @@ public class WordNet {
         if (ancestor != -1) return this.synsets.get(ancestor);
         else return null;
     }
-
-    // do unit testing of this class
-    // public static void main(String[] args) {
-    // }
 }
