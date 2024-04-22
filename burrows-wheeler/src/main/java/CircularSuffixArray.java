@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.Collections;
-
 import edu.princeton.cs.algs4.StdOut;
 
 public class CircularSuffixArray {
