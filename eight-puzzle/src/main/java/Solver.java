@@ -12,7 +12,10 @@ public class Solver {
     private int moves = 0;
     private boolean isSolvable = false;
 
-    // find a solution to the initial board (using the A* algorithm)
+    /**
+     * Find a solution to the initial board
+     * @param initial the initial board
+     */
     public Solver(final Board initial) {
         if (initial == null) throw new IllegalArgumentException();
 
@@ -70,21 +73,33 @@ public class Solver {
         }
     }
 
-    // is the initial board solvable? (see below)
+    /**
+     * Is the initial board solvable?
+     * @return true if the initial board is solvable, false otherwise
+     */
     public boolean isSolvable() {
         return this.isSolvable;
     }
 
-    // min number of moves to solve initial board; -1 if unsolvable
+    /**
+     * Min number of moves to solve initial board
+     * @return min number of moves to solve initial board
+     */
     public int moves() {
         return this.moves;
     }
 
-    // sequence of boards in a shortest solution; null if unsolvable
+    /**
+     * Sequence of boards in a shortest solution; null if unsolvable
+     * @return sequence of boards in a shortest solution; null if unsolvable
+     */
     public Iterable<Board> solution() {
         return this.solution;
     }
 
+    /**
+     * Search node
+     */
     private class SearchNode implements Comparable<SearchNode> {
         private Board board = null;
         private SearchNode previousNode = null;

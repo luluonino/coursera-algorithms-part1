@@ -9,8 +9,10 @@ public class Board {
     private int hamming = -1;
     private int manhattan = -1;
 
-    // create a board from an n-by-n array of tiles,
-    // where tiles[row][col] = tile at (row, col)
+    /**
+     * Create a board from an n-by-n array of tiles,
+     * @param tiles tiles[row][col] = tile at (row, col)
+     */
     public Board(final int[][] tiles) {
         this.n = tiles.length;
         this.tiles = new int[n][n];
@@ -19,7 +21,10 @@ public class Board {
         }
     }
 
-    // string representation of this board
+    /**
+     * Returns a string representation of the board.
+     * @return a string representation of the board
+     */
     public String toString() {
         int largest = this.n * this.n - 1;
         int lengthN2 = String.valueOf(largest).length();
@@ -39,12 +44,18 @@ public class Board {
         return builder.toString();
     }
 
-    // board dimension n
+    /**
+     * Returns the board dimension n.
+     * @return the board dimension n
+     */
     public int dimension() {
         return this.n;
     }
 
-    // number of tiles out of place
+    /**
+     * Returns the number of tiles out of place.
+     * @return the number of tiles out of place
+     */
     public int hamming() {
         if (this.hamming != -1) return this.hamming;
         int count = 0;
@@ -59,7 +70,10 @@ public class Board {
         return count;
     }
 
-    // sum of Manhattan distances between tiles and goal
+    /**
+     * Returns the sum of Manhattan distances between tiles and goal.
+     * @return the sum of Manhattan distances between tiles and goal
+     */
     public int manhattan() {
         if (this.manhattan != -1) return this.manhattan;
         int count = 0;
@@ -75,12 +89,19 @@ public class Board {
         return count;
     }
 
-    // is this board the goal board?
+    /**
+     * Is this board the goal board?
+     * @return true if this board is the goal board, false otherwise
+     */
     public boolean isGoal() {
         return this.manhattan() == 0;
     }
 
-    // does this board equal y?
+    /**
+     * Is this board equal to y?
+     * @param y the other board
+     * @return true if this board is equal to y, false otherwise
+     */
     @Override
     public boolean equals(final Object y) {
         if (y == null) return false;
@@ -93,12 +114,10 @@ public class Board {
         return Arrays.deepEquals(this.tiles, that.tiles);
     }
 
-//    @Override
-//    public int hashCode() {
-//        return this.toString().hashCode();
-//    }
-
-    // all neighboring boards
+    /**
+     * Returns all neighboring boards.
+     * @return all neighboring boards
+     */
     public Iterable<Board> neighbors() {
         List<Board> neighbors = new ArrayList<>();
         int rowBlank = 0;
@@ -135,7 +154,10 @@ public class Board {
         return neighbors;
     }
 
-    // a board that is obtained by exchanging any pair of tiles
+    /**
+     * Returns a board that is obtained by exchanging any pair of tiles.
+     * @return a board that is obtained by exchanging any pair of tiles
+     */
     public Board twin() {
         int[][] newTiles = new int[this.n][this.n];
         for (int i = 0; i < this.n; i++) {
