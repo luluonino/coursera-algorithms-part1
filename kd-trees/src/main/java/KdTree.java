@@ -11,19 +11,33 @@ public class KdTree {
     private Node root = null;
     private int size = 0;
 
-    public KdTree() { // construct an empty KdTree of points
+    /**
+     * Construct an empty KdTree of points.
+     */
+    public KdTree() {
     }
 
+    /**
+     * Is the tree empty?
+     * @return true if the tree is empty, false otherwise.
+     */
     public boolean isEmpty() { // is the tree empty?
         return root == null;
     }
 
-    public int size() { // number of points in the tree
+    /**
+     * Number of points in the tree
+     * @return number of points in the tree
+     */
+    public int size() {
         return this.size;
     }
 
+    /**
+     * Insert point if not already in tree
+     * @param p point to insert
+     */
     public void insert(final Point2D p) {
-        // add the point to the tree (if it is not already in the set)
         if (p == null) throw new IllegalArgumentException();
         if (root == null) root = new Node(p, true, new RectHV(0., 0., 1., 1.));
         else if (this.contains(p)) return;
@@ -31,32 +45,53 @@ public class KdTree {
         this.size++;
     }
 
-    public void draw() { // draw all points to standard draw
+    /**
+     * Draw all points to standard draw
+     */
+    public void draw() {
         draw(root);
     }
 
-    public boolean contains(final Point2D p) { // does the set contain point p?
+    /**
+     * Does the tree contain point p?
+     * @param p point to check
+     * @return true if the tree contains point p, false otherwise
+     */
+    public boolean contains(final Point2D p) {
         if (p == null) throw new IllegalArgumentException();
         return search(root, p) != null;
     }
 
+    /**
+     * All points that are inside the rectangle (or on the boundary)
+     * @param rect rectangle to check
+     * @return all points that are inside the rectangle (or on the boundary)
+     */
     public Iterable<Point2D> range(final RectHV rect) {
-        // all points that are inside the rectangle (or on the boundary)
         if (rect == null) throw new IllegalArgumentException();
         ArrayList<Point2D> resultList  = new ArrayList<>();
         range(root, rect, resultList);
         return resultList;
     }
 
+    /**
+     * A nearest neighbor in the tree to point p; null if the tree is empty
+     * @param p point to check
+     * @return a nearest neighbor in the tree to point p; null if the tree is empty
+     */
     public Point2D nearest(final Point2D p) {
-        // a nearest neighbor in the set to point p; null if the set is empty
         if (p == null) throw new IllegalArgumentException();
         if (root == null) return null;
         return nearest(root, p, 2.).point(); // largest dist^2 <= 2.
     }
 
+    /**
+     * Insert point to the tree rooted at node
+     * @param node root of the tree
+     * @param p point to insert
+     * @return root of the tree
+     */
     private Node insert(final Node node, final Point2D p) {
-        // insert point to the tree rooted at node
         if (node == null || p == null) throw new IllegalArgumentException();
         // move to the left subtree
         if (node.axis() && p.x() < node.point().x()
@@ -101,6 +136,10 @@ public class KdTree {
         return node;
     }
 
+    /**
+     * Draw the tree rooted at node
+     * @param node root of the tree
+     */
     private void draw(final Node node) {
         if (node == null) return;
         else {
@@ -110,6 +149,12 @@ public class KdTree {
         }
     }
 
+    /**
+     * Search for point p in the tree rooted at node
+     * @param node root of the tree
+     * @param p point to search
+     * @return node containing point p
+     */
     private Node search(final Node node, final Point2D p) {
         if (node == null) return null;
         if (node.point().equals(p)) return node;
@@ -121,6 +166,12 @@ public class KdTree {
         }
     }
 
+    /**
+     * Range search for points in the rectangle rooted at node
+     * @param node root of the tree
+     * @param rect rectangle to search
+     * @param resultList list of points in the rectangle
+     */
     private void range(
         final Node node,
         final RectHV rect,
@@ -135,6 +186,13 @@ public class KdTree {
         if (node.right != null) range(node.right, rect, resultList);
     }
 
+    /**
+     * Find the nearest point to p in the tree rooted at node
+     * @param node root of the tree
+     * @param p point to search
+     * @param distPar smallest distance so far
+     * @return node containing the nearest point to p
+     */
     private Node nearest(final Node node, final Point2D p, double distPar) {
         double dist = node.point().distanceSquaredTo(p);
         if (dist < distPar) distPar = dist; // smallest dist so far
@@ -180,6 +238,9 @@ public class KdTree {
                 ? node : (distLeft < distRight ? nodeLeft : nodeRight);
     }
 
+    /**
+     * Node class for KdTree
+     */
     private class Node {
         public Node left = null;
         public Node right = null;
@@ -197,18 +258,33 @@ public class KdTree {
             this.rect = rect;
         }
 
+        /**
+         * Point of the node
+         * @return point of the node
+         */
         public Point2D point() {
             return this.point;
         }
 
+        /**
+         * Rectangle of the node
+         * @return rectangle of the node
+         */
         public RectHV rect() {
             return this.rect;
         }
 
+        /**
+         * Axis of the node
+         * @return axis of the node
+         */
         public boolean axis() {
             return this.axis;
         }
 
+        /**
+         * Draw the node
+         */
         public void draw() {
             StdDraw.setPenColor(this.axis() ? Color.RED : Color.BLUE);
             StdDraw.setPenRadius(0.005);
