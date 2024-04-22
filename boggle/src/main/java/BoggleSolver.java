@@ -3,9 +3,9 @@ import java.util.Arrays;
 import edu.princeton.cs.algs4.Bag;
 
 public class BoggleSolver {
-    private final TrieSET26 dictionary;
-    private int rows;
-    private int cols;
+    private final TrieSET26 dictionary; // 26-way trie
+    private int rows; // number of rows in Boggle board
+    private int cols; // number of columns in Boggle board
     private Bag<String> results;
     private ArrayList<TrieSET26.Node> visitedNodes;
     private TrieSET26.Node root;
