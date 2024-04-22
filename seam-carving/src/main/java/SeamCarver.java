@@ -7,7 +7,10 @@ public class SeamCarver {
     private int[][] rgb;
     private double[][] energy;
 
-    // create a seam carver object based on the given picture
+    /**
+     * Create a seam carver object based on the given picture
+     * @param picture the picture to be processed
+     */
     public SeamCarver(Picture picture) {
         if (picture == null) throw new IllegalArgumentException();
 
@@ -29,7 +32,10 @@ public class SeamCarver {
         this.computeEnergy();
     }
 
-    // current picture
+    /**
+     * Return the current picture
+     * @return the current picture
+     */
     public Picture picture() {
         Picture picture = new Picture(this.width, this.height);
         for (int col = 0; col < this.width; col++) {
@@ -41,24 +47,38 @@ public class SeamCarver {
         return picture;
     }
 
-    // width of current picture
+    /**
+     * Return the width of the current picture
+     * @return the width of the current picture
+     */
     public int width() {
         return this.width;
     }
 
-    // height of current picture
+    /**
+     * Return the height of the current picture
+     * @return the height of the current picture
+     */
     public int height() {
         return this.height;
     }
 
-    // energy of pixel at column x and row y
+    /**
+     * Return the energy of the pixel at the given position
+     * @param x the column index
+     * @param y the row index
+     * @return the energy of the pixel at the given position
+     */
     public double energy(int x, int y) {
         if (!validateIndex(x, y))
             throw new IllegalArgumentException("index out of range");
         return this.energy[x][y];
     }
 
-    // sequence of indices for horizontal seam
+    /**
+     * Find the horizontal seam of the current picture
+     * @return the horizontal seam of the current picture
+     */
     public int[] findHorizontalSeam() {
         int[] seam = new int[this.width];
         for (int k = 0; k < seam.length; k++) {
@@ -124,7 +144,10 @@ public class SeamCarver {
         return seam;
     }
 
-    // sequence of indices for vertical seam
+    /**
+     * Find the vertical seam of the current picture
+     * @return the vertical seam of the current picture
+     */
     public int[] findVerticalSeam() {
         int[] seam = new int[this.height];
         for (int k = 0; k < seam.length; k++) {
@@ -191,7 +214,10 @@ public class SeamCarver {
         return seam;
     }
 
-    // remove horizontal seam from current picture
+    /**
+     * Remove the horizontal seam from the current picture
+     * @param seam the horizontal seam to be removed
+     */
     public void removeHorizontalSeam(int[] seam) {
         if (seam == null) throw new IllegalArgumentException();
         if (!validateSeam(seam, false))
@@ -204,7 +230,10 @@ public class SeamCarver {
         this.computeEnergy();
     }
 
-    // remove vertical seam from current picture
+    /**
+     * Remove the vertical seam from the current picture
+     * @param seam the vertical seam to be removed
+     */
     public void removeVerticalSeam(int[] seam) {
         if (seam == null) throw new IllegalArgumentException();
         if (!validateSeam(seam, true))
@@ -217,20 +246,44 @@ public class SeamCarver {
         this.computeEnergy();
     }
 
+    /**
+     * Check if the given index is on the border
+     * @param i the column index
+     * @param j the row index
+     * @return true if the given index is on the border, false otherwise
+     */
     private boolean isBorder(final int i, final int j) {
         if (!validateIndex(i, j))
             throw new IllegalArgumentException("Index out of range");
         return i == 0 || j == 0 || i == this.width - 1 || j == this.height - 1;
     }
 
+    /**
+     * Check if the given index is valid
+     * @param i the column index
+     * @param j the row index
+     * @return true if the given index is valid, false otherwise
+     */
     private boolean validateIndex(final int i, final int j) {
         return !(i < 0 || j < 0 || i >= this.width || j >= this.height);
     }
 
+    /**
+     * Check if the given index is valid
+     * @param i the column or row index
+     * @param isColIndex true if the index is a column index, false if it is a row index
+     * @return true if the given index is valid, false otherwise
+     */
     private boolean validateIndex(final int i, boolean isColIndex) {
         return !(i < 0 || i >= (isColIndex ? this.width : this.height));
     }
 
+    /**
+     * Validate the given seam
+     * @param seam the seam to be validated
+     * @param isVertical true if the seam is vertical, false if it is horizontal
+     * @return true if the seam is valid, false otherwise
+     */
     private boolean validateSeam(int[] seam, boolean isVertical) {
         int expectedLength = isVertical ? this.height : this.width;
         if (seam.length != expectedLength) return false;
@@ -242,6 +295,11 @@ public class SeamCarver {
         return true;
     }
 
+    /**
+     * Update the color arrays after removing a seam
+     * @param seam the seam to be removed
+     * @param isVertical true if the seam is vertical, false if it is horizontal
+     */
     private void updateColorArrays(int[] seam, boolean isVertical) {
         if (isVertical) {
             for (int row = 0; row < this.height; row++) {
@@ -262,6 +320,9 @@ public class SeamCarver {
         }
     }
 
+    /**
+     * Compute the energy of each pixel in the picture
+     */
     private void computeEnergy() {
         int[][] r = new int[this.width][this.height];
         int[][] g = new int[this.width][this.height];
