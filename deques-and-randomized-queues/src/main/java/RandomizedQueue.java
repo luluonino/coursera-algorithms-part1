@@ -7,20 +7,35 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
   private Item[] s;
   private int size;
 
-  public RandomizedQueue() { // construct an empty randomized queue
+  /**
+   * Construct an empty randomized queue.
+   */
+  public RandomizedQueue() {
     s = (Item[]) new Object[1];
     size = 0;
   }
 
-  public boolean isEmpty() { // is the randomized queue empty?
+  /**
+   * Is the randomized queue empty?
+   * @return true if the randomized queue is empty, false otherwise.
+   */
+  public boolean isEmpty() {
     return size == 0;
   }
 
-  public int size() { // return the number of items on the randomized queue
+  /**
+   * Return the number of items on the randomized queue.
+   * @return the number of items on the randomized queue.
+   */
+  public int size() {
     return size;
   }
 
-  public void enqueue(Item item) { // add the item
+  /**
+   * Add the item.
+   * @param item the item to add.
+   */
+  public void enqueue(Item item) {
     if (item == null) {
       throw new IllegalArgumentException();
     }
@@ -31,7 +46,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     s[size++] = item;
   }
 
-  public Item dequeue() { // remove and return a random item
+  /**
+   * Remove and return a random item.
+   * @return a random item.
+   */
+  public Item dequeue() {
     if (isEmpty()) {
       throw new NoSuchElementException();
     }
@@ -47,7 +66,11 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     return item;
   }
 
-  public Item sample() { // return a random item (but do not remove it)
+  /**
+   * Return a random item (but do not remove it).
+   * @return a random item.
+   */
+  public Item sample() {
     if (isEmpty()) {
       throw new NoSuchElementException();
     }
@@ -56,11 +79,17 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     return s[randomIndex];
   }
 
+  /**
+   * Return an independent iterator over items in random order.
+   * @return an independent iterator over items in random order.
+   */
   public Iterator<Item> iterator() {
-    // return an independent iterator over items in random order
     return new RandomizedQueueIterator();
   }
 
+  /**
+   * An iterator
+   */
   private class RandomizedQueueIterator implements Iterator<Item> {
     final int[] indices = new int[size];
     int current = -1;
@@ -89,6 +118,10 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
   }
 
+  /**
+   * Resize the array.
+   * @param newCapacity the new capacity.
+   */
   private void resize(int newCapacity) {
     Item[] copy = (Item[]) new Object[newCapacity];
     for (int i = 0; i < size; i++) {
@@ -97,7 +130,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     s = copy;
   }
 
-  // unit testing (required)
   public static void main(String[] args) {
     RandomizedQueue<String> myQueue = new RandomizedQueue<>();
     System.out.println(myQueue.isEmpty());

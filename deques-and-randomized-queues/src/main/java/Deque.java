@@ -7,22 +7,40 @@ public class Deque<Item> implements Iterable<Item> {
   private Node last = null;
   private int size = 0;
 
+  /**
+   * Node class to represent each item in the deque
+   */
   private class Node {
     Item item;
     Node next;
     Node previous;
   }
 
+  /**
+   * Construct an empty deque
+   */
   public Deque() { }
 
+  /**
+   * Is the deque empty?
+   * @return true if the deque is empty, false otherwise
+   */
   public boolean isEmpty() {
     return (first == null && last == null);
   }
 
+  /**
+   * Return the number of items on the deque
+   * @return the number of items on the deque
+   */
   public int size() {
     return size;
   }
 
+  /**
+   * Add the item to the front
+   * @param item the item to add
+   */
   public void addFirst(Item item) {
     if (item == null) {
       throw new IllegalArgumentException();
@@ -47,6 +65,10 @@ public class Deque<Item> implements Iterable<Item> {
     }
   }
 
+  /**
+   * Add the item to the end
+   * @param item the item to add
+   */
   public void addLast(Item item) {
     if (item == null) {
       throw new IllegalArgumentException();
@@ -71,6 +93,10 @@ public class Deque<Item> implements Iterable<Item> {
     }
   }
 
+  /**
+   * Remove and return the item from the front
+   * @return the item from the front
+   */
   public Item removeFirst() {
     if (isEmpty()) {
       throw new NoSuchElementException();
@@ -90,6 +116,10 @@ public class Deque<Item> implements Iterable<Item> {
     return item;
   }
 
+  /**
+   * Remove and return the item from the end
+   * @return the item from the end
+   */
   public Item removeLast() {
     if (isEmpty()) {
       throw new NoSuchElementException();
@@ -109,10 +139,17 @@ public class Deque<Item> implements Iterable<Item> {
     return item;
   }
 
+  /**
+   * Return an iterator over items in order from front to end
+   * @return an iterator over items in order from front to end
+   */
   public Iterator<Item> iterator() {
     return new DequeIterator();
   }
 
+  /**
+   * Iterator class to iterate over the deque
+   */
   private class DequeIterator implements Iterator<Item> {
     private Node current = first;
 
@@ -134,7 +171,6 @@ public class Deque<Item> implements Iterable<Item> {
     }
   }
 
-  // unit testing (required)
   public static void main(String[] args) {
     Deque<String> myDeque = new Deque<>();
     System.out.println(myDeque.isEmpty());
