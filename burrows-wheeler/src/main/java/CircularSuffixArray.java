@@ -15,15 +15,58 @@ public class CircularSuffixArray {
         if (s == null) throw new IllegalArgumentException("input is null");
         this.originalString = s;
         this.indices = new int[s.length()];
-        ArrayList<CircularSuffix> circularSuffixes = new ArrayList<>();
+
         for (int i = 0; i < s.length(); i++) {
-            circularSuffixes.add(new CircularSuffix(i));
+            this.indices[i] = i;
         }
-        // TODO: suffix sorting can be faster than O(n log n) using radix sort
-        Collections.sort(circularSuffixes);
-        for (int i = 0; i < s.length(); i++) {
-            this.indices[i] = circularSuffixes.get(i).getCharIndex();
+
+        threeWayRadixQuickSort(this.indices, 0, s.length() - 1, 0);
+    }
+
+    /**
+     * Returns the dth character in the ith suffix
+     * @param i index of suffix (not sorted)
+     * @param d index of character in suffix
+     * @return character
+     */
+    private int charAt(int i, int d) {
+        return this.originalString.charAt((i + d) % this.originalString.length());
+    }
+
+    /**
+     * 3-way string radix quicksort a[lo..hi] starting at dth character
+     * @param a array of indices of suffixes (not sorted)
+     * @param lo low index
+     * @param hi high index
+     * @param d index of character in suffix
+     */
+    private void threeWayRadixQuickSort(int[] a, int lo, int hi, int d) {
+        if (hi <= lo) return; // base case
+        if (d >= this.originalString.length()) return; // base case (string exhausted)
+        int lt = lo, gt = hi; // pointers of less than and greater than
+        int v = charAt(a[lo], d); // pivot
+        int i = lo + 1; // pointer of equal to
+        while (i <= gt) { // loop invariant: a[lo..lt-1] < v = a[lt..gt] < a[gt+1..hi]
+            int t = charAt(a[i], d);
+            if (t < v) swap(a, lt++, i++);
+            else if (t > v) swap(a, i, gt--);
+            else i++;
         }
+        threeWayRadixQuickSort(a, lo, lt - 1, d); // sort less than
+        if (v >= 0) threeWayRadixQuickSort(a, lt, gt, d + 1); // sort equal to
+        threeWayRadixQuickSort(a, gt + 1, hi, d); // sort greater than
+    }
+
+    /**
+     * Swap two elements in an int array
+     * @param a array
+     * @param i index of first element
+     * @param j index of second element
+     */
+    private void swap(int[] a, int i, int j) {
+        int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
     }
 
     /**
@@ -48,50 +91,14 @@ public class CircularSuffixArray {
     // unit testing (required)
     public static void main(String[] args) {
         CircularSuffixArray csa = new CircularSuffixArray("abracadabra!");
+        StdOut.println(csa.originalString);
         for (int i = 0; i < csa.length(); i++) {
             StdOut.println(csa.index(i));
         }
-    }
-
-    private class CircularSuffix implements Comparable<CircularSuffix> {
-        private final int charIndex;
-
-        /**
-         * Constructor
-         * @param s Reference to original string
-         * @param i index of starting char of the suffix in original string
-         */
-        public CircularSuffix(int i) {
-            this.charIndex = i;
-        }
-
-        /**
-         * Get index of starting char
-         * @return charIndex
-         */
-        public int getCharIndex() {
-            return charIndex;
-        }
-
-        @Override
-        public int compareTo(CircularSuffix circularSuffix) {
-            int thisCharIndex = this.charIndex;
-            int thatCharIndex = circularSuffix.getCharIndex();
-            int counter = 0;
-            while (counter < originalString.length()) {
-                char thisChar = originalString.charAt(thisCharIndex++);
-                char thatChar = originalString.charAt(thatCharIndex++);
-                if (thisChar < thatChar)
-                    return -1;
-                else if (thisChar > thatChar)
-                    return 1;
-                else {
-                    if (thisCharIndex == originalString.length()) thisCharIndex = 0;
-                    if (thatCharIndex == originalString.length()) thatCharIndex = 0;
-                    counter++;
-                }
-            }
-            return 0;
+        csa = new CircularSuffixArray("aaaaaaaaaaaaa");
+        StdOut.println(csa.originalString);
+        for (int i = 0; i < csa.length(); i++) {
+            StdOut.println(csa.index(i));
         }
     }
 }
