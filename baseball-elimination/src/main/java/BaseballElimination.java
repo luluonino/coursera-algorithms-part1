@@ -9,16 +9,21 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 
 public class BaseballElimination {
-    private final int numTeams;
-    private final HashMap<String, Integer> indexMap;
-    private final ArrayList<String> teams;
-    private final ArrayList<Integer> w;
-    private final ArrayList<Integer> l;
-    private final ArrayList<Integer> r;
-    private final HashMap<String, Integer> g;
-    private final ArrayList<Boolean> isEliminated;
-    private final ArrayList<Bag<String>> certificate;
+    private final int numTeams; // number of teams in the division
+    private final HashMap<String, Integer> indexMap; // map team name to index
+    private final ArrayList<String> teams; // list of team names
+    private final ArrayList<Integer> w; // list of wins
+    private final ArrayList<Integer> l; // list of losses
+    private final ArrayList<Integer> r; // list of remaining games
+    private final HashMap<String, Integer> g; // games left between teams
+    private final ArrayList<Boolean> isEliminated; // list of elimination status
+    private final ArrayList<Bag<String>> certificate; // list of certificate of elimination
 
+    /**
+     * Constructor for BaseballElimination class.
+     * It initializes the baseball division from given filename in format specified.
+     * @param filename name of file containing baseball division
+     */
     public BaseballElimination(String filename) {
         // create a baseball division from given filename in format specified
         this.indexMap = new HashMap<>();
@@ -105,34 +110,66 @@ public class BaseballElimination {
         }
     }
 
-    public int numberOfTeams() { // number of teams
+    /**
+     * Returns the number of teams in the division
+     * @return the number of teams in the division
+     */
+    public int numberOfTeams() {
         return this.numTeams;
     }
 
-    public Iterable<String> teams() { // all teams
+    /**
+     * Returns all teams in the division
+     * @return An iterable of all teams in the division
+     */
+    public Iterable<String> teams() {
         return this.teams;
     }
 
-    public int wins(String team) { // number of wins for given team
+    /**
+     * Returns the number of wins for given team
+     * @param team The name of the team
+     * @return The number of wins for given team
+     * @throws IllegalArgumentException if team is not in division
+     */
+    public int wins(String team) {
         if (!this.indexMap.containsKey(team))
             throw new IllegalArgumentException();
         return this.w.get(this.indexMap.get(team));
     }
 
-    public int losses(String team) { // number of losses for given team
+    /**
+     * Returns the number of losses for given team
+     * @param team The name of the team
+     * @return The number of losses for given team
+     * @throws IllegalArgumentException if team is not in division
+     */
+    public int losses(String team) {
         if (!this.indexMap.containsKey(team))
             throw new IllegalArgumentException();
         return this.l.get(this.indexMap.get(team));
     }
 
-    public int remaining(String team) { // number of remaining games for team
+    /**
+     * Returns the number of remaining games for given team
+     * @param team The name of the team
+     * @return The number of remaining games for given team
+     * @throws IllegalArgumentException if team is not in division
+     */
+    public int remaining(String team) {
         if (!this.indexMap.containsKey(team))
             throw new IllegalArgumentException();
         return this.r.get(this.indexMap.get(team));
     }
 
+    /**
+     * Returns the number of remaining games between two given teams
+     * @param team1 The name of the first team
+     * @param team2 The name of the second team
+     * @return The number of remaining games between two given teams
+     * @throws IllegalArgumentException if either team is not in division
+     */
     public int against(String team1, String team2) {
-        // number of remaining games between team1 and team2
         if (!this.indexMap.containsKey(team1)
             || !this.indexMap.containsKey(team2)
         ) throw new IllegalArgumentException();
@@ -141,12 +178,24 @@ public class BaseballElimination {
         ));
     }
 
+    /**
+     * Check if the given team is eliminated
+     * @param team The name of the team
+     * @return True if team is eliminated, false otherwise
+     * @throws IllegalArgumentException if team is not in division
+     */
     public boolean isEliminated(String team) { // is given team eliminated?
         if (!this.indexMap.containsKey(team))
             throw new IllegalArgumentException();
         return this.isEliminated.get(this.indexMap.get(team)).booleanValue();
     }
 
+    /**
+     * Returns the subset R of teams that eliminates given team; null if not eliminated
+     * @param team The name of the team
+     * @return An iterable of teams that eliminates given team
+     * @throws IllegalArgumentException if team is not in division
+     */
     public Iterable<String> certificateOfElimination(String team) {
         // subset R of teams that eliminates given team; null if not eliminated
         if (!this.indexMap.containsKey(team))
